@@ -42,6 +42,7 @@ GOTO :RE
 
 :NEXT
 SET "ICONS=%LOCALAPPDATA%\Material-Icons\!SELECT@%CURSOR%!"
+SET THEME=!SELECT@%CURSOR%!
 
 SET CURSOR=1
 SET SELECT@1=Confirm
@@ -88,9 +89,15 @@ FOR %%I IN ("!FPATH!") DO SET "FILE=%%~nI"
 FOR %%I IN ("!FPATH!") DO SET "DIRECTORY=%%~dpI"
 FOR %%I IN ("!DIRECTORY:~0,-1!") DO SET "DIRNAME=%%~nxI"
 
-IF NOT EXIST !ICONS!\folder-!DIRNAME!.ico (
-	ECHO.Icon does not exist.
-	EXIT /B 1
+:: Icon Setup
+IF NOT EXIST "!ICONS!" MD "!ICONS!"
+
+IF NOT EXIST "!ICONS!\folder-!DIRNAME!.ico" (
+	CURL --fail --ssl-no-revoke "https://raw.githubusercontent.com/136MasterNR/Material-Folders/main/icons/!THEME!/folder-!DIRNAME!.ico" 2>NUL >"!ICONS!\folder-!DIRNAME!.ico"
+	FOR /F %%I IN ("!ICONS!\folder-!DIRNAME!.ico") DO IF %%~zI EQU 0 (
+		DEL /Q "!ICONS!\folder-!DIRNAME!.ico"
+		EXIT /B 1
+	)
 )
 
 :: Read
@@ -162,7 +169,7 @@ FOR /F "TOKENS=1,2,*DELIMS=:[=" %%1 IN ('SET !FILE!:') DO (
 	) ELSE ECHO;!ITEM:]=!>> "!FPATH!!FILE!.inibuild"
 )
 
-attrib -s -h "!FPATH!!FILE!.ini"
+attrib -s -h -r "!FPATH!!FILE!.ini"
 MOVE "!FPATH!!FILE!.inibuild" "!FPATH!!FILE!.ini" && attrib +s +h "!FPATH!!FILE!.ini"
 
 EXIT /B 0
