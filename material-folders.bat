@@ -6,15 +6,13 @@
 @SETLOCAL ENABLEDELAYEDEXPANSION
 
 :UI
-SET CURSOR=1
-
-
 :: Options - Edit ONLY this to register more icon names
 SET SELECT@1=material
 SET SELECT@2=material-open
 SET SELECT@3=
 
 
+SET CURSOR=1
 SET MAX=0
 FOR /F "TOKENS=1DELIMS==" %%1 IN ('SET SELECT@ 2^>NUL') DO SET /A MAX+=1
 ECHO.
@@ -76,8 +74,10 @@ FOR /L %%I IN (1, 1, !MAX!) DO IF /I %CHOICE.INPUT%==%%I SET CURSOR=%%I
 GOTO :RE-CONFIRM
 
 :CHANGE-ALL
+CLS
+
 :: Go through all folders
-FOR /F "TOKENS=*DELIMS=" %%I IN ('DIR /S /A:D /B') DO CALL :PROC "%%I"
+FOR /F "TOKENS=*DELIMS=" %%I IN ('DIR /S /A:D /B ^| findstr /I /V /C:"\\.git\\"') DO CALL :PROC "%%I"
 
 
 EXIT /B 0
@@ -118,9 +118,10 @@ SET desktop:.ShellClassInfo[IconResource]=!ShellIconInfo!
 SET desktop:IconResource+AD0-C[!ShellIconInfo:\=+AFw-!]=$_S
 
 :: Updates the ini file
+IF !DIRNAME!==.git attrib -h "!DIRECTORY:~0,-1!"
 CALL :write "!FILE!" "!DIRECTORY!"
-
 attrib +r "!DIRECTORY:~0,-1!"
+IF !DIRNAME!==.git attrib +h "!DIRECTORY:~0,-1!"
 
 EXIT /B 0
 
@@ -169,7 +170,7 @@ FOR /F "TOKENS=1,2,*DELIMS=:[=" %%1 IN ('SET !FILE!:') DO (
 	) ELSE ECHO;!ITEM:]=!>> "!FPATH!!FILE!.inibuild"
 )
 
-attrib -s -h -r "!FPATH!!FILE!.ini"
+attrib -s -h "!FPATH!!FILE!.ini"
 MOVE "!FPATH!!FILE!.inibuild" "!FPATH!!FILE!.ini" && attrib +s +h "!FPATH!!FILE!.ini"
 
 EXIT /B 0

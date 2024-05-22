@@ -1,4 +1,4 @@
-# Batch Material Icon Theme
+# Folder Material Icons Theme
  Material Icon Theme for your Explorer
 
  Original Project: https://github.com/PKief/vscode-material-icon-theme
