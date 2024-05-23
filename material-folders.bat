@@ -92,18 +92,21 @@ SET "FPATH=%~1\desktop.ini"
 FOR %%I IN ("!FPATH!") DO SET "FILE=%%~nI"
 FOR %%I IN ("!FPATH!") DO SET "DIRECTORY=%%~dpI"
 FOR %%I IN ("!DIRECTORY:~0,-1!") DO SET "DIRNAME=%%~nxI"
+SET ICONNAME=!DIRNAME!
+SET ICONNAME_S=!ICONNAME:~0,-1!
 
 :: Icon Setup
 IF NOT EXIST "!ICONS!" MD "!ICONS!"
 
 IF NOT EXIST "!ICONS!\folder-!DIRNAME!.ico" (
-	CURL --fail --ssl-no-revoke "https://raw.githubusercontent.com/136MasterNR/Material-Folders/main/icons/!THEME!/folder-!DIRNAME!.ico" 2>NUL >"!ICONS!\folder-!DIRNAME!.ico"
+	CURL --fail --ssl-no-revoke "https://raw.githubusercontent.com/136MasterNR/Material-Folders/main/icons/!THEME!/folder-!ICONNAME!.ico" 2>NUL >"!ICONS!\folder-!ICONNAME!.ico"
 	FOR /F %%I IN ("!ICONS!\folder-!DIRNAME!.ico") DO IF %%~zI EQU 0 (
-		CURL --fail --ssl-no-revoke "https://raw.githubusercontent.com/136MasterNR/Material-Folders/main/icons/!THEME!/folder-!DIRNAME!s.ico" 2>NUL >"!ICONS!\folder-!DIRNAME!.ico"
-		FOR /F %%I IN ("!ICONS!\folder-!DIRNAME!.ico") DO IF %%~zI EQU 0 (
-			DEL /Q "!ICONS!\folder-!DIRNAME!.ico"
+		CURL --fail --ssl-no-revoke "https://raw.githubusercontent.com/136MasterNR/Material-Folders/main/icons/!THEME!/folder-!ICONNAME_S!.ico" 2>NUL >"!ICONS!\folder-!ICONNAME:~0,-1!!.ico"
+		FOR /F %%I IN ("!ICONS!\folder-!ICONNAME_S!.ico") DO IF %%~zI EQU 0 (
+			DEL /Q "!ICONS!\folder-!DIRNAME_S!.ico"
 			EXIT /B 1
 		)
+		SET ICONNAME=!ICONNAME:~0,-1!
 	)
 )
 
@@ -120,7 +123,7 @@ IF NOT EXIST "!FPATH!" (
 CALL :read "!FILE!" "!DIRECTORY!"
 
 :: Change something in the ini - "test" is the file name
-SET ShellIconInfo=!ICONS!\folder-!DIRNAME!.ico,0
+SET ShellIconInfo=!ICONS!\folder-!ICONNAME!.ico,0
 SET desktop:.ShellClassInfo[IconResource]=!ShellIconInfo!
 SET desktop:IconResource+AD0-C[!ShellIconInfo:\=+AFw-!]=$_S
 
