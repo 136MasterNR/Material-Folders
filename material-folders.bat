@@ -82,9 +82,7 @@ CLS
 ECHO.Listing folders...
 ECHO.
 FOR /F "TOKENS=*DELIMS=" %%I IN ('DIR /S /A:D /B ^| findstr /I /V /C:"\\." /C:"\\node_modules\\"') DO CALL :PROC "%%I"
-FOR /F "TOKENS=*DELIMS=" %%I IN ('DIR /A:D /B ^| findstr /I /C:"\\."') DO ECHO.CALL :PROC "%%I"
-DIR /A:D /B | findstr /I /C:"\\\."
-pause
+FOR /F "TOKENS=*DELIMS=" %%I IN ('DIR /A:D /B ^| findstr /I /C:"\."') DO CALL :PROC "%%I"
 
 EXIT /B 0
 
@@ -106,7 +104,7 @@ IF NOT EXIST "!ICONS!\folder-!DIRNAME!.ico" (
 	FOR /F %%I IN ("!ICONS!\folder-!DIRNAME!.ico") DO IF %%~zI EQU 0 (
 		DEL /Q "!ICONS!\folder-!DIRNAME!.ico"
 		IF NOT EXIST "!ICONS!\folder-!ICONNAME_S!.ico" (
-			CURL --fail --ssl-no-revoke "https://raw.githubusercontent.com/136MasterNR/Material-Folders/main/icons/!THEME!/folder-!ICONNAME_S!.ico" 2>NUL >"!ICONS!\folder-!ICONNAME:~0,-1!!.ico"
+			CURL --fail --ssl-no-revoke "https://raw.githubusercontent.com/136MasterNR/Material-Folders/main/icons/!THEME!/folder-!ICONNAME_S!.ico" 2>NUL >"!ICONS!\folder-!ICONNAME_S!.ico"
 			FOR /F %%I IN ("!ICONS!\folder-!ICONNAME_S!.ico") DO IF %%~zI EQU 0 (
 				DEL /Q "!ICONS!\folder-!ICONNAME_S!.ico"
 				EXIT /B 1
@@ -135,10 +133,8 @@ SET "desktop:.ShellClassInfo[IconResource]=!ShellIconInfo!"
 SET "desktop:IconResource+AD0-C[!ShellIconInfo:\=+AFw-!]=$_S"
 
 :: Updates the ini file
-IF !DIRNAME!==.git attrib -h "!DIRECTORY:~0,-1!"
 CALL :write "!FILE!" "!DIRECTORY!"
 attrib +r "!DIRECTORY:~0,-1!"
-IF !DIRNAME!==.git attrib +h "!DIRECTORY:~0,-1!"
 
 EXIT /B 0
 
