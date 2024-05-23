@@ -79,7 +79,9 @@ GOTO :RE-CONFIRM
 CLS
 
 :: Go through all folders
-FOR /F "TOKENS=*DELIMS=" %%I IN ('DIR /S /A:D /B ^| findstr /I /V /C:"\\.git\\" /C:"\\.next\\" /C:"\\node_modules\\"') DO CALL :PROC "%%I"
+ECHO.Listing folders...
+ECHO.
+FOR /F "TOKENS=*DELIMS=" %%I IN ('DIR /S /A:D /B ^| findstr /I /V /C:"\\.git\\" /C:"\\node_modules\\"') DO CALL :PROC "%%I"
 
 
 EXIT /B 0
@@ -97,8 +99,11 @@ IF NOT EXIST "!ICONS!" MD "!ICONS!"
 IF NOT EXIST "!ICONS!\folder-!DIRNAME!.ico" (
 	CURL --fail --ssl-no-revoke "https://raw.githubusercontent.com/136MasterNR/Material-Folders/main/icons/!THEME!/folder-!DIRNAME!.ico" 2>NUL >"!ICONS!\folder-!DIRNAME!.ico"
 	FOR /F %%I IN ("!ICONS!\folder-!DIRNAME!.ico") DO IF %%~zI EQU 0 (
-		DEL /Q "!ICONS!\folder-!DIRNAME!.ico"
-		EXIT /B 1
+		CURL --fail --ssl-no-revoke "https://raw.githubusercontent.com/136MasterNR/Material-Folders/main/icons/!THEME!/folder-!DIRNAME!s.ico" 2>NUL >"!ICONS!\folder-!DIRNAME!.ico"
+		FOR /F %%I IN ("!ICONS!\folder-!DIRNAME!.ico") DO IF %%~zI EQU 0 (
+			DEL /Q "!ICONS!\folder-!DIRNAME!.ico"
+			EXIT /B 1
+		)
 	)
 )
 
@@ -173,7 +178,10 @@ FOR /F "TOKENS=1,2,*DELIMS=:[=" %%1 IN ('SET !FILE!:') DO (
 )
 
 attrib -s -h "!FPATH!!FILE!.ini"
-MOVE "!FPATH!!FILE!.inibuild" "!FPATH!!FILE!.ini" && attrib +s +h "!FPATH!!FILE!.ini"
+>NUL MOVE "!FPATH!!FILE!.inibuild" "!FPATH!!FILE!.ini" && (
+	attrib +s +h "!FPATH!!FILE!.ini"
+	ECHO.Updated !FPATH!
+)
 
 EXIT /B 0
 
