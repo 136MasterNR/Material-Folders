@@ -101,6 +101,7 @@ IF NOT EXIST "!ICONS!" MD "!ICONS!"
 IF NOT EXIST "!ICONS!\folder-!DIRNAME!.ico" (
 	CURL --fail --ssl-no-revoke "https://raw.githubusercontent.com/136MasterNR/Material-Folders/main/icons/!THEME!/folder-!ICONNAME!.ico" 2>NUL >"!ICONS!\folder-!ICONNAME!.ico"
 	FOR /F %%I IN ("!ICONS!\folder-!DIRNAME!.ico") DO IF %%~zI EQU 0 (
+		DEL /Q "!ICONS!\folder-!DIRNAME!.ico"
 		CURL --fail --ssl-no-revoke "https://raw.githubusercontent.com/136MasterNR/Material-Folders/main/icons/!THEME!/folder-!ICONNAME_S!.ico" 2>NUL >"!ICONS!\folder-!ICONNAME:~0,-1!!.ico"
 		FOR /F %%I IN ("!ICONS!\folder-!ICONNAME_S!.ico") DO IF %%~zI EQU 0 (
 			DEL /Q "!ICONS!\folder-!DIRNAME_S!.ico"
