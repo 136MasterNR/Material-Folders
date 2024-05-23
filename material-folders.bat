@@ -79,7 +79,7 @@ GOTO :RE-CONFIRM
 CLS
 
 :: Go through all folders
-FOR /F "TOKENS=*DELIMS=" %%I IN ('DIR /S /A:D /B ^| findstr /I /V /C:"\\.git\\"') DO CALL :PROC "%%I"
+FOR /F "TOKENS=*DELIMS=" %%I IN ('DIR /S /A:D /B ^| findstr /I /V /C:"\\.git\\" /C:"\\.next\\" /C:"\\node_modules\\"') DO CALL :PROC "%%I"
 
 
 EXIT /B 0
