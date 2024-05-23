@@ -9,7 +9,8 @@
 :: Options - Edit ONLY this to register more icon names
 SET SELECT@1=material
 SET SELECT@2=material-open
-SET SELECT@3=
+SET SELECT@3=vscode
+SET SELECT@4=vscode-open
 
 
 SET CURSOR=1
