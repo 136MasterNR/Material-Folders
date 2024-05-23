@@ -1,5 +1,5 @@
 # Folder Material Icons Theme
- Material Icon Theme for your Explorer
+ For when you get lost every time you open explorer to navigate through your VSCode project.
 
 ![CUsersNickDocumentsDesktop_1ProgrammingBatch_Scri_16](https://github.com/136MasterNR/Material-Folders/assets/62593379/b6a577be-0238-4e36-9a50-196870329c0f)
 
