@@ -81,8 +81,10 @@ CLS
 :: Go through all folders
 ECHO.Listing folders...
 ECHO.
-FOR /F "TOKENS=*DELIMS=" %%I IN ('DIR /S /A:D /B ^| findstr /I /V /C:"\\.git\\" /C:"\\node_modules\\"') DO CALL :PROC "%%I"
-
+FOR /F "TOKENS=*DELIMS=" %%I IN ('DIR /S /A:D /B ^| findstr /I /V /C:"\\." /C:"\\node_modules\\"') DO CALL :PROC "%%I"
+FOR /F "TOKENS=*DELIMS=" %%I IN ('DIR /A:D /B ^| findstr /I /C:"\\."') DO ECHO.CALL :PROC "%%I"
+DIR /A:D /B | findstr /I /C:"\\\."
+pause
 
 EXIT /B 0
 
