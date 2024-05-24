@@ -81,6 +81,7 @@ CLS
 :: Go through all folders
 ECHO.Listing folders...
 ECHO.
+
 FOR /F "TOKENS=*DELIMS=" %%I IN ('DIR /S /A:D /B ^| findstr /I /V /C:"\\." /C:"\\node_modules\\"') DO CALL :PROC "%%I"
 FOR /F "TOKENS=*DELIMS=" %%I IN ('DIR /A:D /B ^| findstr /I /C:"\."') DO CALL :PROC "%%I"
 
@@ -93,16 +94,17 @@ FOR %%I IN ("!FPATH!") DO SET "FILE=%%~nI"
 FOR %%I IN ("!FPATH!") DO SET "DIRECTORY=%%~dpI"
 FOR %%I IN ("!DIRECTORY:~0,-1!") DO SET "DIRNAME=%%~nxI"
 SET ICONNAME=!DIRNAME!
+IF "!ICONNAME:~0,1!"=="." SET ICONNAME=!ICONNAME:~1!
 SET ICONNAME_S=!ICONNAME:~0,-1!
 
 :: Icon Setup
 IF NOT EXIST "!ICONS!" MD "!ICONS!"
 
-IF NOT EXIST "!ICONS!\folder-!DIRNAME!.ico" (
+IF NOT EXIST "!ICONS!\folder-!ICONNAME!.ico" (
 	CURL --fail --ssl-no-revoke "https://raw.githubusercontent.com/136MasterNR/Material-Folders/main/icons/!THEME!/folder-!ICONNAME!.ico" 2>NUL >"!ICONS!\folder-!ICONNAME!.ico"
 	
-	FOR /F %%I IN ("!ICONS!\folder-!DIRNAME!.ico") DO IF %%~zI EQU 0 (
-		DEL /Q "!ICONS!\folder-!DIRNAME!.ico"
+	FOR /F %%I IN ("!ICONS!\folder-!ICONNAME!.ico") DO IF %%~zI EQU 0 (
+		DEL /Q "!ICONS!\folder-!ICONNAME!.ico"
 		IF NOT EXIST "!ICONS!\folder-!ICONNAME_S!.ico" (
 			CURL --fail --ssl-no-revoke "https://raw.githubusercontent.com/136MasterNR/Material-Folders/main/icons/!THEME!/folder-!ICONNAME_S!.ico" 2>NUL >"!ICONS!\folder-!ICONNAME_S!.ico"
 			FOR /F %%I IN ("!ICONS!\folder-!ICONNAME_S!.ico") DO IF %%~zI EQU 0 (
